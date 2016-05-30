@@ -1,0 +1,39 @@
+body {
+    #guess {
+        div {
+            display: none;
+        }
+    }
+    div.gold {
+        margin: 10px;
+        display: inline-block;
+        border: 1px solid #F9F906;
+        border-bottom: 1px solid gray;
+        border-right: 1px solid gray;
+        width: 120px;
+        height: 120px;
+        background-color: #FFEB3B;
+        border-radius: 100%;
+
+        span:first-child {
+            border: 1px black solid;
+            height: 45px;
+            width: 10px;
+            display: block;
+            background-color: white;
+            position: relative;
+            top: 10px;
+            left: 20px;
+            transform: rotate(40deg);
+            border-radius: 100% 50% 50% 100%;
+        }
+
+        span:last-child {
+            font-size: 3.5em;
+            position: relative;
+            left: 35px;
+            top: -15px;
+        }
+    }
+
+}

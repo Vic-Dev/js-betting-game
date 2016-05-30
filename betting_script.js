@@ -2,14 +2,12 @@ var isInt = function(n) {
     return n % 1 === 0;
 }
 
-var betweenRange = function(n) {
-    var min = 1;
-    var max = 10;
-    return n >= 1 && n <= 10;
+var betweenRange = function(n, min, max) {
+    return n >= min && n <= max;
 }
 
-var verifiedGuess = function(input) {
-    return isInt(input) && betweenRange(input);
+var verified = function(input, min, max) {
+    return isInt(input) && betweenRange(input, min, max);
 }
 
 var compareGuess = function(random, guess) {
@@ -25,20 +23,34 @@ var showHideUpdate = function() {
     $("#guess").find("div").hide();
 }
 
+var addGold = function(n) {
+    for (var i = 0; i < n; i++) {
+        $("body").append('<div class="gold"><span></span><span>$1</span></div>');
+    }
+}
+
+var removeGold = function(n) {
+    for (var i = 0; i < n; i++) {
+        $(".gold:last").remove();
+    }
+}
+
 var bankroll = 100;
 var play = "";
 var betAmount;
 
 window.onload = function() {
     bankrollUpdate();
+    addGold(bankroll);
     $("#bet").on("submit", function(event) {
         var betInput = $(this).find("input:first").val()
-        if (betInput != "5" && betInput != "10") {
-            $(this).find("p:first").text("Please enter either 5 or 10").show().fadeOut(1000);
+        if (!verified(betInput, 5, 10)) {
+            $(this).find("p:first").text("Please enter a number between 5 and 10").show().fadeOut(1000);
             event.preventDefault();
         } else {
             betAmount = betInput;
             $(this).find("input:first").prop('disabled', true);
+            $("#guess").find("p:first").hide();
             $("#guess").find("div").show();
             event.preventDefault();
         }
@@ -47,7 +59,7 @@ window.onload = function() {
         var randomNum = Math.floor(Math.random() * 10) + 1;
         console.log(randomNum);
         var guess = $(this).find("input:first").val()
-        if (!verifiedGuess(guess)) {
+        if (!verified(guess, 1, 10)) {
             $(this).find("p:first").text("Please only enter a number between 1 and 10").show().fadeOut(1000);
             event.preventDefault();
             return;
@@ -56,6 +68,7 @@ window.onload = function() {
             case 0:
                 bankroll += Number(betAmount);
                 $(this).find("p:first").text("Correct!! You win your bet!").show();
+                addGold(betAmount);
                 bankrollUpdate();
                 showHideUpdate();
                 event.preventDefault();
@@ -75,6 +88,7 @@ window.onload = function() {
                     bankroll -= Number(betAmount);
                 }
             $(this).find("p:first").text("Wrong :( You lose your bet.").show();
+            removeGold(betAmount);
             bankrollUpdate();
             showHideUpdate();
             event.preventDefault();
